@@ -3,10 +3,6 @@
 *Automatische Datenübermittlung aus einem Fremdsystem für das
 DIVI-Intensivregister*
 
-*Version: 1-2*
-
-*Letzte Änderung:* *29.06.2023*
-
 *Schriftführung: RKI/BMG*
 
 **§1 Verantwortung**
