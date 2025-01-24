@@ -21,7 +21,7 @@ Für die anderen Datenfelder sind auch NULL-Werte zugelassen. Das Speichern der 
 #### Fall: Datenfeld Betriebseinschränkung
 NULL-Werte sind auch hier zugelassen und bedeuten, dass der Anwender nicht um den Zustand des Feldes weiß.
 * Bei Auswahl der Betriebssituation mit ‚KEINE_ANGABE‘ oder ‚REGULAERER_BETRIEB‘ sollen die vier Felder für Betriebseinschränkungen (betriebseinschraenkungPersonal, betriebseinschraenkungRaum, betriebseinschraenkungBeatmungsgeraet, betriebseinschraenkungVerbrauchsmaterial) NULL sein. 
-* Bei Auswahl der Betriebssituation mit ‚TEILWEISE EINGESCHRÄNKT‘ oder ‚EINGESCHRÄNKT‘ sollen die vier Felder ‚Gründe der Betriebseinschränkung‘ angezeigt werden. Es können beliebig viele dieser Betriebseinschränkungsgründe gesetzt werden (Mehrfachauswahl), kein Ausfüllen (NULL-Wert) der vier Felder ist auch möglich.
+* Bei Auswahl der Betriebssituation mit ‚TEILWEISE_EINGESCHRAENKT‘ oder ‚EINGESCHRAENKT‘ sollen die vier Felder ‚Gründe der Betriebseinschränkung‘ angezeigt werden. Es können beliebig viele dieser Betriebseinschränkungsgründe gesetzt werden (Mehrfachauswahl), kein Ausfüllen (NULL-Wert) der vier Felder ist auch möglich.
 
 ## 3) Notwendige Datentypen für Datenfelder
 Die Datentypen der gemeldeten Werte müssen mit den Datentypen übereinstimmen, die in der Dokumentation der Schnittstelle (https://www.intensivregister.de/api/public/api-docs-ui) als Schema hinterlegt sind.
