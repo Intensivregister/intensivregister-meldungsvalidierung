@@ -43,12 +43,12 @@ Das Intensivregister hat mehrere, komplett unabhängige Umgebungen. Neuen API-Pa
 
 Tests können in der Testumgebung durchgeführt werden, dabei können die folgenden Pfade verwendet werden:
 
-* Access-Token-Endpunkt - `https://auth.intensivregister.de/ir-prod-alike/protocol/openid-connect/token`
+* Access-Token-Endpunkt - `https://auth.intensivregister.de/realms/ir-prod-alike/protocol/openid-connect/token`
 * Basispfad der Serveranwendung - `https://prod-alike.intensivregister.de/api/`
 
 Nach Test wird der OICD-Client für die Produktiv-Umgebung freigeschaltet. Die Pfade dort sind:
 
-* Access-Token-Endpunkt - `https://auth.intensivregister.de/intensivregister/protocol/openid-connect/token`
+* Access-Token-Endpunkt - `https://auth.intensivregister.de/realms/intensivregister/protocol/openid-connect/token`
 * Basispfad der Serveranwendung - `https://www.intensivregister.de/api/`
 
 In der Testumgebung können selbstständig Meldebereiche zum Testen über das [Partner-Portal](https://partner.intensivregister.de) unter *Zugänge* > *Meldebereiche verwalten* angelegt werden.
