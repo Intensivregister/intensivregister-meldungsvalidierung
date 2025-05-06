@@ -120,14 +120,16 @@ Sollte gegen eine Regel verstoßen werden, soll der User auf diesen Regelbruch h
 
 ## 6) Warnmeldung bei bestimmten Prüfregeln auf Eingabeseite
 
-Die folgenden Prüfregeln werden nur mit einer Warnung versehen. Eine Meldung kann trotzdem gespeichert werden, auch wenn diese Prüfregeln nicht erfüllt sind. 
+Die folgenden Prüfregeln werden nur mit einer Warnung versehen. Eine Meldung kann trotzdem gespeichert werden, auch wenn eine Warnung angezeigt wird. 
 Bei Regelbruch sollte eine Warnung mit der Aufforderung, die Angaben zu überprüfen, erscheinen (z. B. auf der Meldungszusammenfassungsseite oder durch ein Pop-up bei der Eingabe). Wenn ein für die Regel relevantes Datenfeld nicht ausgefüllt wurde, soll die Warnmeldung folglich nicht angezeigt werden.
 
-* **Regel 6A** patienten_invasiv_beatmet >= patienten_ecmo
+Eine Warnung auf der Zusammenfassungsseite ist anzuzeigen, wenn folgende Formeln erfüllt sind:
 
-    **Regel 6A2A** faelle_covid_aktuell_mit_manifestation_beatmet >= faelle_covid_aktuell_mit_manifestation_ecmo
+* **Regel 6A** patienten_invasiv_beatmet < patienten_ecmo
 
-* **Regel 6B** Eine Warnung auf der Zusammenfassungsseite ist anzuzeigen, wenn die Summe(COVID-19-Altersstrata) < faelle_covid_aktuell.
+    **Regel 6A2A** faelle_covid_aktuell_mit_manifestation_beatmet < faelle_covid_aktuell_mit_manifestation_ecmo
+
+* **Regel 6B**  Summe(COVID-19-Altersstrata) < faelle_covid_aktuell.
 
 ## 7) Warnmeldung bei stark veränderten Werten
 Bei zu starker Abweichung von der letzten Meldung sollte die folgende Warnmeldung für den User erscheinen: "Sind sie sicher, dass die Eingabe bei [Label] [Wert] korrekt ist, da die Zahl sehr stark abweicht?". Diese Warnmeldungen sollten nur bei numerischen Datenfeldern angezeigt werden. Wie groß die Abweichung sein muss, damit eine Warnmeldung angezeigt wird, hängt von der Größenordnung der vorherigen Meldung ab:
