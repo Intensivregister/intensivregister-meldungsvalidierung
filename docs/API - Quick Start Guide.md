@@ -256,6 +256,6 @@ Für die Meldung-Erfassen-Endpunkte gibt es ein separates Dokument mit den Plaus
 Für die Unterstützung bei der Einrichtung von Zugängen wenden Sie sich bitte an den Helpdesk: `intensivregister-hilfe@rki.de`
 
 Für technische Fragen zu diesem Dokument/der Schnittstelle wenden Sie sich bitte an das Support-Team:
-`Tech-support-IntensivRegister@prodyna.com`. 
+`ir-tech-support@rki.de`. 
 
 Das RKI ist erreichbar unter `intensivregister@rki.de`
