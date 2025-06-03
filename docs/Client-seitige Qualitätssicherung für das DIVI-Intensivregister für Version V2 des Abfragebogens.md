@@ -7,10 +7,7 @@ Dieses Dokument fasst alle Plausibilitäts-Checks & Systemanforderungen zusammen
 * **Durchgestrichene Passagen** betreffen derzeit **pausierte**, d. h. nicht erfragte Variablen. Nach Ende der Pausierung treten die betreffenden Prüfregeln wieder in Kraft.
 * Die Nummerierung der Prüfregeln ist historisch bedingt. Durch nachträgliche Änderungen, Hinzufügen oder Streichen von Plausibilitätsprüfungen kann daher ein Sprung in der Nummerierung auftreten.
 
-## 1) Zusammenfassung nach der Meldung aller Daten
-Nach der Eingabe aller Datenfelder sieht der User in einem letzten Schritt jene eingegebenen Daten zusammengefasst, die sich seit der letzten Meldung geändert haben. Diese Übersicht nennen wir im weiteren Verlauf des Dokuments "Meldungszusammenfassungsseite". Hier sollen die eingegeben Werte noch einmal überprüft werden, bevor sie final gespeichert werden. Dies dient der Sicherstellung einer hohen Datenqualität. An diesem Schritt sollen auch Warnmeldungen erscheinen, um den User auf potenzielle Fehler hinzuweisen (siehe Kapitel 2, 6 und 7).
-
-## 2) Pflichtfelder zum Speichern der Meldung
+## 1) Pflichtfelder zum Speichern der Meldung
 Eine Meldung kann von technischer Seite gespeichert werden, wenn sie mindestens Angaben zu den folgenden Datenfeldern enthält:
 * betreibbare Betten *(intensiv_betten)*
 * belegte Betten *(intensiv_betten_belegt)* 
@@ -23,13 +20,13 @@ NULL-Werte sind auch hier zugelassen und bedeuten, dass der Anwender nicht um de
 * Bei Auswahl der Betriebssituation mit ‚KEINE_ANGABE‘ oder ‚REGULAERER_BETRIEB‘ sollen die vier Felder für Betriebseinschränkungen (betriebseinschraenkungPersonal, betriebseinschraenkungRaum, betriebseinschraenkungBeatmungsgeraet, betriebseinschraenkungVerbrauchsmaterial) NULL sein. 
 * Bei Auswahl der Betriebssituation mit ‚TEILWEISE_EINGESCHRAENKT‘ oder ‚EINGESCHRAENKT‘ sollen die vier Felder ‚Gründe der Betriebseinschränkung‘ angezeigt werden. Es können beliebig viele dieser Betriebseinschränkungsgründe gesetzt werden (Mehrfachauswahl), kein Ausfüllen (NULL-Wert) der vier Felder ist auch möglich.
 
-## 3) Notwendige Datentypen für Datenfelder
+## 2) Notwendige Datentypen für Datenfelder
 Die Datentypen der gemeldeten Werte müssen mit den Datentypen übereinstimmen, die in der Dokumentation der Schnittstelle (https://www.intensivregister.de/api/public/api-docs-ui) als Schema hinterlegt sind.
 
-## 4) Notwendige Zahlenintervalle für numerische Eingabewerte
+## 3) Notwendige Zahlenintervalle für numerische Eingabewerte
 Die gemeldeten Werte aller numerischer Datenfelder müssen ganze Zahlen sein in dem Intervall [0,999] (0 und 999 eingeschlossen).
 
-## 5) Notwendige Prüfregeln auf Eingabeseite
+## 4) Notwendige Prüfregeln auf Eingabeseite
 Die Prüfregeln sind **immer** aktiv, selbst wenn kein Wert in einem für die Regel relevanten Feld eingegeben wurde. Die Prüfregel **muss** eingehalten werden, um eine Meldung speichern zu können.
 
 Wenn ein für die Regel relevantes Datenfeld **nicht** ausgefüllt wurde, werden für die Prüfregel leere Felder als die Zahl „0“ interpretiert. *Beispiel:* Für intensiv_betten wurde kein Wert eingetragen, intensiv_betten_belegt = 2. Nach Regel 5A wird nun getestet auf 0 >= 2. Da dies nicht erfüllt ist, wird ein Speichern verhindert.
@@ -118,7 +115,7 @@ Sollte gegen eine Regel verstoßen werden, soll der User auf diesen Regelbruch h
     * faelle_covid_aktuell_ecmo
     * faelle_covid_ohne_symptomatik
 
-## 6) Warnmeldung bei bestimmten Prüfregeln auf Eingabeseite
+## 5) Warnmeldung bei bestimmten Prüfregeln auf Eingabeseite (Frontend)
 
 Die folgenden Prüfregeln werden nur mit einer Warnung versehen. Eine Meldung kann trotzdem gespeichert werden, auch wenn diese Prüfregeln nicht erfüllt sind. 
 Bei Regelbruch sollte eine Warnung mit der Aufforderung, die Angaben zu überprüfen, erscheinen (z. B. auf der Meldungszusammenfassungsseite oder durch ein Pop-up bei der Eingabe). Wenn ein für die Regel relevantes Datenfeld nicht ausgefüllt wurde, soll die Warnmeldung folglich nicht angezeigt werden.
@@ -129,7 +126,7 @@ Bei Regelbruch sollte eine Warnung mit der Aufforderung, die Angaben zu überpr�
 
 * **Regel 6B** Eine Warnung auf der Zusammenfassungsseite ist anzuzeigen, wenn die Summe(COVID-19-Altersstrata) < faelle_covid_aktuell.
 
-## 7) Warnmeldung bei stark veränderten Werten
+## 6) Warnmeldung bei stark veränderten Werten (Frontend)
 Bei zu starker Abweichung von der letzten Meldung sollte die folgende Warnmeldung für den User erscheinen: "Sind sie sicher, dass die Eingabe bei [Label] [Wert] korrekt ist, da die Zahl sehr stark abweicht?". Diese Warnmeldungen sollten nur bei numerischen Datenfeldern angezeigt werden. Wie groß die Abweichung sein muss, damit eine Warnmeldung angezeigt wird, hängt von der Größenordnung der vorherigen Meldung ab:
 * bei Größenordnung 0-9 vorheriger Meldungen: Warnmeldung nur bei Sprung von +- >= 7
 * bei Größenordnung 10-19 vorheriger Meldungen: Warnmeldung bei Verdoppelung oder Reduktion auf ein Viertel
@@ -139,7 +136,7 @@ Eine Warnung muss für jedes Datenfeld, das eine starke Abweichung aufzeigt, ein
 
 Die Integration der Warnmeldung setzt voraus, dass das Client-System die letzte Meldung des Meldebereichs gespeichert hat und abrufen kann.
 
-## 8) Anzeige der abgefragten Datenfelder je nach Meldebereich
+## 7) Anzeige der abgefragten Datenfelder je nach Meldebereich
 Alle Datenfelder werden in „Meldung erfassen“ per Default allen Meldebereichen angezeigt.
 
 **Ausnahmen sind:**
@@ -167,7 +164,7 @@ Alle Datenfelder werden in „Meldung erfassen“ per Default allen Meldebereich
     * anzahl_schwangere 
 4.	ECMO-bezogene Eingabefelder (in *ICU-Status*, *COVID-19-Status*, <del>*RSV- und Influenza-Status*</del>) werden **nicht** in Meldebereichen abgefragt, die unter „Mein Krankenhausstandort/ Meldebereichsdaten“ die Check-Box des dortigen Datenfeldes „ICU ECMO vorhanden“ **abgewählt** haben und damit über keine ECMO-Kapazitäten im Meldebereich verfügen.
 
-## 9) Funktionalität: Automatisches Werte-Vorausfüllen
+## 8) Funktionalität: Automatisches Werte-Vorausfüllen (Frontend)
 Beim „Meldung erfassen“ kann eine automatische Werte-Vorausfüll-Funktionalität genutzt werden, die alle Datenfelder automatisch mit den Daten der letzten Erfassung befüllt.
 Dies soll den Meldenden das Melden erleichtern, da nur Werte, die sich seit der letzten Erfassung verändert haben, angepasst werden müssen. Die Funktionalität setzt voraus, dass das Client-System die letzte Meldung des Meldebereichs gespeichert hat und abrufen kann.
 
@@ -177,7 +174,7 @@ Für die Abfragen "Verlegte COVID-19-Intensivpatient\*innen", "Verstorbene COVID
 
 Auch im Korrektur-Modus einer schon erfolgten Meldung ist ein Vorausfüllen unabhängig vom Zeitpunkt der vorhergehenden Meldung möglich, auch für die hier unter *Ausnahmen* aufgeführten Datenfelder.
 
-## 10) Funktionalität: Nachträgliche Werte-Korrektur von erfassten Meldungen
+## 9) Funktionalität: Nachträgliche Werte-Korrektur von erfassten Meldungen
 Eine Meldung kann rückwirkend bis zu 14 Tage nach der initialen Erfassung der Meldung von allen Meldenden eines Meldebereichs korrigiert werden.
 Im Frontend des Intensivregisters ist die Korrekturfunktionalität zu finden unter dem Menüpunkt "Mein Krankenhaus-Standort/ Mein Meldebereich:/ Meldungshistorie des Meldebereichs (korrigierbar)".
 
