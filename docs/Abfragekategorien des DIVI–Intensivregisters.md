@@ -36,8 +36,8 @@ Das folgende Dokument führt alle aktuellen Text-Labels und Mouseovers auf, die 
 | Textlabel des Datenfeldes | Mouseover-Text | Antwort-Möglichkeiten | Variablen-Name |
 | :- | :- | :- | :- |
 | Wie schätzen Sie persönlich die aktuelle Situation der Behandlungsplätze in Ihrem Meldebereich ein? | - | *{Dies ist ein erklärender Text zu Folgefragen Q8.1 – Q8.3 im Frontend. Der erklärende Text selbst hat keine Antwortoption.}* | - |
-| **Q8.2:** ICU High-Care (optional) | - | „Verfügbar“, „Begrenzt“, „Ausgelastet“, „Keine Angabe“ | kapazitaeten: statusEinschaetzungHighcare |
-| **Q8.3:** ICU ECMO (optional) | - | „Verfügbar“, „Begrenzt“, „Ausgelastet“, „Keine Angabe“ | kapazitaeten: statusEinschaetzungEcmo |
+| **Q8.2:** ICU High-Care (optional) | - | **Frontend:** „Verfügbar“, „Begrenzt“, „Ausgelastet“, „Keine Angabe“ **API-Meldung:** „VERFUEGBAR“, „BEGRENZT“, „NICHT_VERFUEGBAR“, "KEINE_ANGABE"| kapazitaeten: statusEinschaetzungHighcare |
+| **Q8.3:** ICU ECMO (optional) | - | **Frontend:**„Verfügbar“, „Begrenzt“, „Ausgelastet“, „Keine Angabe“ **API-Meldung:** „VERFUEGBAR“, „BEGRENZT“, „NICHT_VERFUEGBAR“, "KEINE_ANGABE" | kapazitaeten: statusEinschaetzungEcmo |
 
 **Q8.1** und **Q9** wurden gestrichen.
 
