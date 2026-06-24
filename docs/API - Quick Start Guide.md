@@ -78,6 +78,9 @@ Die Antwort ist ein JSON-Dokument mit den dem Client zugewiesenen Meldebereichen
 
 ## 5. Fachliche Anwendungsfaelle
 
+Generell gilt, dass in der api-docs.json die notwendigen Endpunkte (exklusive dem Keycloak-Endpunkt) enthalten sind.
+Diese api-docs.json kann verwendet werden, um sich daraus in der bevorzugten Programmiersprache source files generieren zu lassen, mit welchen man dann sein automatisiertes Meldungssystem aufbauen kann.
+
 ### 5.1 Meldebereiche des Nutzers abfragen
 
 - `GET /stammdaten/meldebereich`
