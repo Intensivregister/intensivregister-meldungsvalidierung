@@ -9,24 +9,24 @@ Dieses Dokument beschreibt den schnellen Einstieg in die Intensivregister-API: Z
 ### 2.1 Zugang einrichten
 
 1. Registrieren Sie sich im [Partner-Portal](https://partner.intensivregister.de).
-2. Nach erfolgreicher Registrierung finden Sie unter **Zugaenge** Ihre Zugangsdaten (Client ID und Client Secret).
+2. Nach erfolgreicher Registrierung finden Sie unter **Zugänge** Ihre Zugangsdaten (Client ID und Client Secret).
 3. Mit diesen Credentials fordern Sie ein Access-Token bei der Authentifizierung (Keycloak/OpenID Connect) an.
 
 ### 2.2 Umgebungen
 
 Das Intensivregister bietet zwei getrennte Umgebungen:
 
-- **TEST**: Entwicklung und Integrationstests, nicht fuer den produktiven Betrieb.
-- **PROD**: Produktive Umgebung fuer die Erfassung realer Meldungen.
+- **TEST**: Entwicklung und Integrationstests, nicht für den produktiven Betrieb.
+- **PROD**: Produktive Umgebung für die Erfassung realer Meldungen.
 
-Fuer API-Partner werden Accounts und OIDC-Clients auf beiden Umgebungen angelegt.
+Für API-Partner werden Accounts und OIDC-Clients auf beiden Umgebungen angelegt.
 
 ### 2.3 Basis-URLs
 
 **TEST**
 
 - `ACCESS_TOKEN_URL`: `https://auth.intensivregister.de/realms/intensivregister-alike/protocol/openid-connect/token`
-- `API_URL`: `https://alike.intensivregister.de/api/`
+- `API_URL`: `https://prod-alike.intensivregister.de/api`
 
 **PROD**
 
@@ -37,7 +37,7 @@ Fuer API-Partner werden Accounts und OIDC-Clients auf beiden Umgebungen angelegt
 
 ### 3.1 Access-Token anfordern
 
-Zur Authentifizierung wird der `client_credentials`-Flow verwendet. Die Token-Antwort enthaelt u. a. das Feld `access_token` und die Gueltigkeitsdauer.
+Zur Authentifizierung wird der `client_credentials`-Flow verwendet (*keycloak). Die Token-Antwort enthält u. a. das Feld `access_token` und die Gültigkeitsdauer.
 
 ```bash
 curl --location --request POST \
@@ -48,24 +48,41 @@ curl --location --request POST \
   --data-urlencode 'client_secret=<CLIENT_SECRET>'
 ```
 
+Typisches Antwortmuster (gekürzt):
+
+```json
+{
+  "access_token": "ey...",
+  "expires_in": 1800,
+  "refresh_expires_in": 1800,
+  "refresh_token": "ey...",
+  "token_type": "Bearer",
+  "not-before-policy": 0,
+  "session_state": "...",
+  "scope": "profile email"
+}
+```
+
 ### 3.2 Bearer-Token verwenden
 
 Das Access-Token muss bei **jedem** API-Aufruf im Header `Authorization` mit dem Prefix `Bearer ` gesendet werden:
 
 `Authorization: Bearer <access_token>`
 
-Ohne gueltiges Token werden Requests abgewiesen.
+Ohne gültiges Token werden Requests abgewiesen.
 
 ### 3.3 Postman Collection
 
 Verwenden Sie die Collection `Intensivregister - Meldung erfassen - Quick-Start.postman_collection.json`.
 
-- Sie enthaelt die relevanten Requests fuer Authentifizierung und Meldungsabgabe.
-- Die Collection nutzt Platzhalter fuer die API-Basis-URL. Setzen Sie je nach Umgebung:
+- Sie enthält die relevanten Requests für Authentifizierung und Meldungsabgabe.
+- Die Collection nutzt Platzhalter für die API-Basis-URL. Setzen Sie je nach Umgebung die Variable `API_URL` auf.
+- `https://prod-alike.intensivregister.de/api` (TEST)
+- `https://www.intensivregister.de/api/` (PROD)
 
 ## 4. Erster API-Aufruf (Smoke Test)
 
-Mit folgendem Request koennen Sie direkt pruefen, ob Authentifizierung und Zugriff funktionieren:
+Mit folgendem Request können Sie direkt prüfen, ob Authentifizierung und Zugriff funktionieren:
 
 ```bash
 curl --location --request GET \
@@ -76,10 +93,10 @@ curl --location --request GET \
 
 Die Antwort ist ein JSON-Dokument mit den dem Client zugewiesenen Meldebereichen.
 
-## 5. Fachliche Anwendungsfaelle
+## 5. Fachliche Anwendungsfälle
 
-Generell gilt, dass in der api-docs.json die notwendigen Endpunkte (exklusive dem Keycloak-Endpunkt) enthalten sind.
-Diese api-docs.json kann verwendet werden, um sich daraus in der bevorzugten Programmiersprache source files generieren zu lassen, mit welchen man dann sein automatisiertes Meldungssystem aufbauen kann.
+Generell gilt, dass in der `api-docs.json` die notwendigen Endpunkte (exklusive dem Keycloak-Endpunkt) enthalten sind.
+Diese `api-docs.json` kann verwendet werden, um sich daraus in der bevorzugten Programmiersprache Source Files generieren zu lassen, mit welchen man dann sein automatisiertes Meldungssystem aufbauen kann (*openapi-generator).
 
 ### 5.1 Meldebereiche des Nutzers abfragen
 
@@ -94,64 +111,42 @@ Diese api-docs.json kann verwendet werden, um sich daraus in der bevorzugten Pro
 - `POST /meldungen` (neue Meldung)
 - `PUT /meldungen/{meldungId}` (bestehende Meldung aktualisieren)
 
-Technisch benoetigt werden:
+Technisch benötigt werden:
 
-- ein gueltiges Access-Token,
+- ein gültiges Access-Token,
 - die ID des Meldebereichs,
-- eine selbst erzeugte UUID fuer neue Meldungen bzw. die bestehende `meldungId` fuer Updates.
+- eine selbst erzeugte UUID für neue Meldungen bzw. die bestehende `meldungId` für Updates.
 
-Hinweis: Ist die `meldungId` bereits durch einen anderen Meldebereich belegt, wird die Meldung mit Status-Code `403` abgelehnt.
+Hinweis: Ist die `meldungId` bereits durch einen anderen Meldebereich belegt, wird die Meldung mit Status-Code `403` abgelehnt (*meldung-403).
 
 Wichtige Feldhinweise:
 
 - `id`: selbst generierte UUID (neu) oder ID der zu aktualisierenden Meldung
 - `api_version`: muss `V2` sein (`V1` wird nicht mehr akzeptiert)
 
-`null`-Werte (oder nicht gesendete optionale Felder) sind grundsaetzlich erlaubt und bedeuten, dass kein verifizierter Zustand vorliegt.
-
-Die Verordnung zur Krankenhauskapazitaetssurveillance definiert die Meldepflicht fuer bestimmte Inhalte:
-[Verordnung zur Krankenhauskapazitaetssurveillance](https://www.gesetze-im-internet.de/khkapsurv/BJNR626200022.html)
-
-Technisch verpflichtende Eingabefelder:
-
-- `id`
-- `meldebereich.id`
-- `kapazitaeten.intensivBetten`
-- `kapazitaeten.intensivBettenBelegt`
-
-Spezialfall Betriebssituation:
-
-Ist `betriebssituation` gleich `KEINE_ANGABE` oder `REGULAERER_BETRIEB`, sollten die folgenden Felder `null` sein:
-
-- `betriebseinschraenkungPersonal`
-- `betriebseinschraenkungRaum`
-- `betriebseinschraenkungBeatmungsgeraet`
-- `betriebseinschraenkungVerbrauchsmaterial`
-
-In anderen Betriebssituationen koennen beliebig viele dieser Gruende gesetzt werden.
-
-Fuer eine genaue fachliche Datenfeld-Definition wenden Sie sich bitte an das RKI.
+Weitere fachliche Feldregeln (Pflichtfelder, `null`-Verhalten, Betriebssituation und Plausibilitätskontext) finden Sie im Detaildokument:
+[Client-seitige Qualitätssicherung für das DIVI-Intensivregister für Version V2 des Abfragebogens](<./Client-seitige Qualitätssicherung für das DIVI-Intensivregister für Version V2 des Abfragebogens.md>)
 
 ## 6. Meldungsfreigabe (fachliche Aktivierung)
 
-Meldungen koennen technisch angenommen werden, ohne sofort fachlich freigegeben zu sein:
+Meldungen können technisch angenommen werden, ohne sofort fachlich freigegeben zu sein:
 
-- Mit Client ID/Secret koennen Meldungen gesendet werden (bei zugeordnetem Meldebereich).
-- Ohne Freigabe werden Meldungen gespeichert, aber nicht fachlich ausgewertet und nicht in der Oberflaeche angezeigt (`aktiv = 0`).
-- Nach Qualitaetspruefung durch das RKI wird der Client freigegeben. Nachfolgende Meldungen sind dann automatisch freigegeben.
+- Mit Client ID/Secret können Meldungen gesendet werden (bei zugeordnetem Meldebereich).
+- Ohne Freigabe werden Meldungen gespeichert, aber nicht fachlich ausgewertet und nicht in der Oberfläche angezeigt (`aktiv = 0`).
+- Nach Qualitätsprüfung durch das RKI wird der Client freigegeben. Nachfolgende Meldungen sind dann automatisch freigegeben.
 - Bereits zuvor gespeicherte Meldungen bleiben im Zustand "nicht freigegeben".
 
-Auf der TEST-Umgebung erfolgt die Freigabe in der Regel direkt; die obigen Einschraenkungen betreffen primaer die **PROD-Umgebung**.
+Auf der TEST-Umgebung erfolgt die Freigabe in der Regel direkt; die obigen Einschränkungen betreffen primär die **PROD-Umgebung**.
 
 ## 7. Validierungen und Fehlerformat
 
 Vor Speicherung oder Aktualisierung werden Meldungen plausibilisiert.
 
 - Es gibt Feldvalidierungen (z. B. `0 <= faelleCovidAktuell <= 999`).
-- Es gibt felduebergreifende Regeln (z. B. `faelleCovidAktuell <= intensivBettenBelegt`).
+- Es gibt feldübergreifende Regeln (z. B. `faelleCovidAktuell <= intensivBettenBelegt`).
 
-Bei Verstoessen antwortet die API mit `400 Bad Request` und einer `errors`-Liste.
-Jeder Eintrag enthaelt typischerweise:
+Bei Verstößen antwortet die API mit `400 Bad Request` und einer `errors`-Liste.
+Jeder Eintrag enthält typischerweise:
 
 - `errorCode`
 - `propertyPath`
@@ -183,17 +178,15 @@ Beispiel-Response:
 }
 ```
 
-Weiterfuehrende Plausibilisierungsregeln:
+Weiterführende Plausibilisierungsregeln:
 [https://github.com/Intensivregister/intensivregister-meldungsvalidierung](https://github.com/Intensivregister/intensivregister-meldungsvalidierung)
 
-## 8. Kompatibilitaet
+## 8. Kompatibilität
 
-Die API wird grundsaetzlich rueckwaertskompatibel weiterentwickelt; fuer aeltere Requests gibt es in der Regel eine Uebergangsphase von mehreren Monaten.
-
-Wichtig fuer Clients:
+Wichtig für Clients:
 
 - Aktivieren Sie bei der Antwortverarbeitung ein "ignore unknowns"-Verhalten.
-- Neue Felder koennen jederzeit in Responses auftauchen.
+- Neue Felder können jederzeit in Responses auftauchen.
 
 Beispiel alt:
 
@@ -217,10 +210,17 @@ Beispiel erweitert:
 }
 ```
 
-Nicht oeffentlich kommunizierte Endpunkte koennen technisch nutzbar sein, werden aber nicht offiziell unterstuetzt.
+Nicht öffentlich kommunizierte Endpunkte können technisch nutzbar sein, werden aber nicht offiziell unterstützt.
 
 ## 9. Kontakt
 
-- Hilfe bei der Einrichtung von Zugaengen: `intensivregister-hilfe@rki.de`
-- Technische Fragen zur Schnittstelle/diesem Dokument: `ir-tech-support@rki.de`
+- Hilfe bei der Einrichtung von Zugängen und bei technischen Fragen: `intensivregister-hilfe@rki.de`
 - Allgemeiner Kontakt RKI: `intensivregister@rki.de`
+
+## Annotationen
+
+- (*keycloak): Wir nutzen Keycloak, eine OpenID-Connect-fähige Lösung.
+- (*openapi-generator): Eine gute Option für die automatische Client-Generierung ist der [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
+- (*meldung-403): Falls eine `meldungId` bereits von einem anderen Meldebereich verwendet wird, wird die Meldung mit `403` abgelehnt.
+
+
