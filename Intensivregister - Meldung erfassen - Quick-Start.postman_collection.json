@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Get Access Token",
+			"name": "1. Get Access Token for PROD environment",
 			"event": [
 				{
 					"listen": "test",
@@ -36,16 +36,6 @@
 							"type": "text"
 						},
 						{
-							"key": "username",
-							"value": "{{USERNAME}}",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "{{PASSWORD}}",
-							"type": "text"
-						},
-						{
 							"key": "client_secret",
 							"value": "{{API_CLIENT_SECRET}}",
 							"type": "text"
@@ -53,16 +43,16 @@
 					]
 				},
 				"url": {
-					"raw": "{{API_ACCESS_TOKEN_URL}}",
+					"raw": "{{ACCESS_TOKEN_URL}}",
 					"host": [
-						"{{API_ACCESS_TOKEN_URL}}"
+						"{{ACCESS_TOKEN_URL}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Frage meine Meldebereiche ab",
+			"name": "2. Frage meine Meldebereiche ab",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -84,7 +74,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{TOKEN}}",
+						"value": "Bearer {{ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
@@ -93,9 +83,9 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{URL}}/stammdaten/meldebereich",
+					"raw": "{{API_URL}}/stammdaten/meldebereich",
 					"host": [
-						"{{URL}}"
+						"{{API_URL}}"
 					],
 					"path": [
 						"stammdaten",
@@ -106,7 +96,7 @@
 			"response": []
 		},
 		{
-			"name": "Frage letzte Meldungen ab",
+			"name": "3. Frage letzte Meldungen ab",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -128,7 +118,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{TOKEN}}",
+						"value": "Bearer {{ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
@@ -137,9 +127,9 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{URL}}/stammdaten/meldebereich/{{MELDEBEREICH_ID}}/letzte-meldung",
+					"raw": "{{API_URL}}/stammdaten/meldebereich/{{MELDEBEREICH_ID}}/letzte-meldung",
 					"host": [
-						"{{URL}}"
+						"{{API_URL}}"
 					],
 					"path": [
 						"stammdaten",
@@ -152,7 +142,7 @@
 			"response": []
 		},
 		{
-			"name": "Melde Kapazität",
+			"name": "4. Melde Kapazität",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -193,7 +183,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "BEARER {{TOKEN}}",
+						"value": "BEARER {{ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
@@ -202,9 +192,9 @@
 					"raw": "{\n\t\"id\": \"{{$guid}}\",\n\t\"meldebereich\": {\n\t\t\"id\": \"{{MELDEBEREICH_ID}}\"\n\t},\n    \"kapazitaeten\": {\n        \"intensivBetten\": 0,\n        \"intensivBettenBelegt\": 0\n    },\n    \"faelleCovidAktuell\": 0,\n    \"faelleCovidAktuellBeatmet\": 0,\n    \"faelleCovidGenesen\": 0,\n    \"faelleCovidVerstorben\": 0,\n    \"betriebssituation\": \"REGULAERER_BETRIEB\",\n    \"betriebseinschraenkungPersonal\": false,\n    \"betriebseinschraenkungRaum\": false,\n    \"betriebseinschraenkungBeatmungsgeraet\": false,\n    \"betriebseinschraenkungVerbrauchsmaterial\": false\n}"
 				},
 				"url": {
-					"raw": "{{URL}}/meldungen",
+					"raw": "{{API_URL}}/meldungen",
 					"host": [
-						"{{URL}}"
+						"{{API_URL}}"
 					],
 					"path": [
 						"meldungen"
